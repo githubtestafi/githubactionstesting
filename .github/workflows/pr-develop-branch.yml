@@ -8,6 +8,10 @@ on:
         - 'force-app/**'
 jobs:
     validate-pr-in-QA:
+        permissions:
+        security-events: write
+        actions: read
+        contents: read
         runs-on: ubuntu-latest
         if: ${{ github.actor != 'dependabot[bot]' }}
         steps:
@@ -61,7 +65,7 @@ jobs:
                   sfdx scanner:run --format sarif --target './**/*.cls' --category "Design,Best Practices,Performance" --outfile 'apexScanResults.sarif'  
                   cd ..
             - name: Upload SARIF file
-              uses: github/codeql-action/upload-sarif@v1
+              uses: github/codeql-action/upload-sarif@v2
               with:
                 sarif_file: changed-sources/apexScanResults.sarif
 
