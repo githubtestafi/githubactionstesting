@@ -8,10 +8,10 @@ on:
         - 'force-app/**'
 
 permissions:
+  security-events: write
+  actions: read
   contents: 'read'
-  id-token: 'write'
-  issues: 'write'
-  
+
 jobs:
     validate-pr-in-QA:
         runs-on: ubuntu-latest
