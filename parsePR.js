@@ -5,7 +5,7 @@ async function extractTests(){
 
     //by default we specify that all tests should run
     let testsFile = __dirname+'/testsToRun.txt';
-    await fs.promises.writeFile(testsFile,'NoTestRun',);
+    await fs.promises.writeFile(testsFile,'NoTestRun','all');
 
     const lines = readline.createInterface({
         input: fs.createReadStream(__dirname+'/pr_body.txt'),
