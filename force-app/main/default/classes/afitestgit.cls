@@ -7,6 +7,6 @@
 **/
 public with sharing class afitestgit {
     public afitestgit() {
- // this is a comment
+ // this is a comment que sera modificado
     }
 }
