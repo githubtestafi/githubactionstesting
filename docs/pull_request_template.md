@@ -9,8 +9,6 @@ In this section you must put the test level that you want to run in your develop
 
  For specific test this must be the format
 
- Apex::[RunSpecifiedTests]::Apex
-
  Apex::[CommunitiesLoginControllerTest,MyProfilePageControllerTest]::Apex
 
  For Local test this must be the format
