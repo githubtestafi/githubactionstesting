@@ -8,6 +8,10 @@ on:
         - 'force-app/**'
 jobs:
     validate-pr-in-QA:
+        permissions:
+        security-events: write
+        actions: read
+        contents: read
         runs-on: ubuntu-latest
         if: ${{ github.actor != 'dependabot[bot]' }}
         steps:
