@@ -6,6 +6,12 @@ on:
       branches: [ QA ]
       paths:
         - 'force-app/**'
+
+permissions:
+  contents: 'read'
+  id-token: 'write'
+  issues: 'write'
+  
 jobs:
     validate-pr-in-QA:
         runs-on: ubuntu-latest
