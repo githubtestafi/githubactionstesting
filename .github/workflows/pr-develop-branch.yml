@@ -30,9 +30,10 @@ jobs:
                 PR_BODY: ${{github.event.pull_request.body}}
                 BRANCH_NAME: ${{ github.head_ref }} 
               run: |
-                  echo $BRANCH_NAME  > ./pr_branch.txt                  
-                  names = $(cat pr_branch.txt)
-                  echo "nrnames=$names" >> $GITHUB_ENV
+                  mkdir testing
+                  echo $BRANCH_NAME  > testing/pr_branch.txt 
+                  echo "artifactPath=testing/pr_branch.txt" >> $GITHUB_ENV
+                  cat artifactPath                
                   echo $PR_BODY > ./pr_body.txt
                   node ./parsePR.js              
                   TESTS=$(cat testsToRun.txt)       
@@ -40,7 +41,7 @@ jobs:
             - uses: actions/upload-artifact@v3
               with: 
                 name: brnameafi
-                path: ${{ pr_branch.txt }}                 
+                path: ${{ env.artifactPath }}                 
             
     Create-PR-UAT:
         needs: validate-pr-in-QA
@@ -57,7 +58,7 @@ jobs:
             - uses: actions/download-artifact@v3
               with: 
                 name: brnameafi
-                path: ${{ pr_branch.txt }} 
+                path: ${{ env.artifactPath }} 
             - name: create pull request
               run: 
                  gh pr create -B UAT -H ${{ env.nrnames }} --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
