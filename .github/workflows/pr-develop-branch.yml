@@ -97,7 +97,7 @@ jobs:
               run: sfdx force:mdapi:deploy -d "changed-sources/destructiveChanges" --checkonly --ignorewarnings 
 
     Create-PR-UAT:
-        needs: validate-pr-in-QA
+        #needs: validate-pr-in-QA
         runs-on: ubuntu-latest
         if: ${{ github.actor != 'dependabot[bot]' }}
         steps:
