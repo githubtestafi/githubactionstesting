@@ -42,6 +42,13 @@ jobs:
         runs-on: ubuntu-latest
         if: ${{ github.actor != 'dependabot[bot]' }}
         steps:
+            - uses: actions/setup-node@v3
+              with:
+                node-version: '14'
+            - name: 'Checkout source code'
+              uses: actions/checkout@v3
+              with:
+                fetch-depth: 0
             - name: create pull request
               env:
                   BRANCH_NAME: ${{ github.head_ref }}
