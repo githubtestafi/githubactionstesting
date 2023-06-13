@@ -96,16 +96,6 @@ jobs:
               run: sfdx force:mdapi:deploy -d "changed-sources/destructiveChanges" --checkonly --ignorewarnings 
 
 
-      Create-PR-UAT:
-          needs: [validate-pr-in-QA]
-          runs-on: ubuntu-latest
-          if: ${{ github.actor != 'dependabot[bot]' }}
-          steps:
-             - name: create pull request
-               run: gh pr create -B UAT -H GITHUB_REF --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
-               env:
-                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 
           
               
