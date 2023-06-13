@@ -6,7 +6,7 @@ on:
       branches: [ QA ]
       paths:
         - 'force-app/**'
-          
+#
 permissions:
   security-events: write
   actions: read
@@ -97,7 +97,7 @@ jobs:
               run: sfdx force:mdapi:deploy -d "changed-sources/destructiveChanges" --checkonly --ignorewarnings 
 
     Create-PR-UAT:
-       # needs: validate-pr-in-QA
+        needs: validate-pr-in-QA
         runs-on: ubuntu-latest
         if: ${{ github.actor != 'dependabot[bot]' }}
         steps:
@@ -109,9 +109,8 @@ jobs:
               with:
                 fetch-depth: 0
             - name: create pull request
-              run: gh pr create -B UAT -H github.ref --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
+              run: gh pr create -B UAT -H default --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
               env:
                   GH_TOKEN: ${{ github.token }}
-                  BRANCH_NAME: ${{ github.head_ref }} 
 
                         
