@@ -35,7 +35,7 @@ jobs:
                   TESTS=$(cat testsToRun.txt)       
                   echo "APEX_TESTS=$TESTS" >> $GITHUB_ENV
             - name: branch name
-              run:
+              run: |
                   echo $BRANCH_NAME
             - name: 'Install Salesforce CLI'
               run: |
