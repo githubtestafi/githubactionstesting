@@ -13,8 +13,8 @@ Apex::[CommunitiesLoginControllerTest,MyProfilePageControllerTest]::Apex
 
 For Local test this must be the format
 
-for Apex::[all]::Apex to run local tests
+Apex::[all]::Apex
 
 For NoTestRun this must be the format
 
-Apex::[NoTestRun]::Apex to not run tests
+Apex::[NoTestRun]::Apex
