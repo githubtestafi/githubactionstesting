@@ -112,5 +112,6 @@ jobs:
               run: gh pr create -B UAT -H default --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
               env:
                   GH_TOKEN: ${{ github.token }}
+                  BRANCH_NAME: ${{ github.head_ref }} 
 
                         
