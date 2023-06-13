@@ -31,7 +31,9 @@ jobs:
                 BRANCH_NAME: ${{ github.head_ref }} 
               run: |
                   mkdir testing
-                  echo $BRANCH_NAME  > testing/pr_branch.txt 
+                  echo $BRANCH_NAME  > testing/pr_branch.txt
+                  echo nombre=$(cat testing/pr_branch.txt)
+                  echo "nrnames=$nombres" >> $GITHUB_ENV  
                   echo "artifactPath=testing/pr_branch.txt" >> $GITHUB_ENV            
                   echo $PR_BODY > ./pr_body.txt
                   node ./parsePR.js              
@@ -60,7 +62,7 @@ jobs:
                 path: ${{ env.artifactPath }} 
             - name: create pull request
               run: 
-                 gh pr create -B UAT -H env.BRANCH_NAME --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
+                 gh pr create -B UAT -H ${{ env.nrnames }} --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
               env:
                   GH_TOKEN: ${{ github.token }}
                   
