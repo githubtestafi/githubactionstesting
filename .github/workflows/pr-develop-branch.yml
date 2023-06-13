@@ -30,13 +30,12 @@ jobs:
                 PR_BODY: ${{github.event.pull_request.body}}
                 BRANCH_NAME: ${{ github.head_ref }} 
               run: |
+                  echo $BRANCH_NAME >> $GITHUB_ENV
                   echo $PR_BODY > ./pr_body.txt
                   node ./parsePR.js              
                   TESTS=$(cat testsToRun.txt)       
                   echo "APEX_TESTS=$TESTS" >> $GITHUB_ENV
-            - name: branch name
-              run: |
-                  echo $BRANCH_NAME
+                  
             - name: 'Install Salesforce CLI'
               run: |
                   wget https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.xz
