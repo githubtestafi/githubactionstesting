@@ -122,7 +122,7 @@ jobs:
                 path: ${{ env.artifactPath }} 
             - name: create pull request
               run: 
-                 gh pr create -B UAT -H ${{ env.names }} --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
+                 gh pr create -B UAT -H ${{ env.artifactPath }} --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
               env:
                   GH_TOKEN: ${{ github.token }}
                   
