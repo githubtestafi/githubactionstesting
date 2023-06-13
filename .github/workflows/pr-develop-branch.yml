@@ -30,7 +30,9 @@ jobs:
                 PR_BODY: ${{github.event.pull_request.body}}
                 BRANCH_NAME: ${{ github.head_ref }} 
               run: |
-                  echo $BRANCH_NAME >> $GITHUB_ENV
+                  echo $BRANCH_NAME  > ./pr_branch.txt            
+                  names=$(cat pr_branch.txt   )       
+                  echo "names=$BRANCH_NAME" >> $GITHUB_ENV
                   echo $PR_BODY > ./pr_body.txt
                   node ./parsePR.js              
                   TESTS=$(cat testsToRun.txt)       
