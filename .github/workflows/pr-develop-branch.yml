@@ -1,4 +1,4 @@
-# Workflow pr-on-qa
+# Workflow pr-on-qa f
 name: Validate PR
 on:
     pull_request:
@@ -6,11 +6,12 @@ on:
       branches: [ QA ]
       paths:
         - 'force-app/**'
-
+#
 permissions:
   security-events: write
   actions: read
   contents: 'read'
+  pull-requests: write
 
 jobs:
     validate-pr-in-QA:
@@ -44,7 +45,7 @@ jobs:
                   echo y | sfdx plugins:install sfdx-git-delta
                   sfdx plugins 
 
-            # Install java as it is required for the next step
+            # Install t java as it is required for the next step
             - name: 'Installing java'
               run: |
                 sudo apt-get update
@@ -73,7 +74,7 @@ jobs:
 
             # We do a check-only deploy and we only run the tests specified in the PR
             # If the env variable does not equal 'all', we know that there is a list of
-            # tests that can be run
+            # tests that can be run test
 
             - name: 'Check-only deploy delta changes - run specified tests'
               if: ${{ env.APEX_TESTS != 'all' && env.APEX_TESTS != 'NoTestRun' }}
@@ -94,3 +95,22 @@ jobs:
             
             - name: 'Deploy destructive changes (if any)'
               run: sfdx force:mdapi:deploy -d "changed-sources/destructiveChanges" --checkonly --ignorewarnings 
+
+    Create-PR-UAT:
+       # needs: validate-pr-in-QA
+        runs-on: ubuntu-latest
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        steps:
+            - uses: actions/setup-node@v3
+              with:
+                node-version: '14'
+            - name: 'Checkout source code'
+              uses: actions/checkout@v3
+              with:
+                fetch-depth: 0
+            - name: create pull request
+              run: gh pr create -B UAT -H QA --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
+              env:
+                  GH_TOKEN: ${{ github.token }}
+
+                        
