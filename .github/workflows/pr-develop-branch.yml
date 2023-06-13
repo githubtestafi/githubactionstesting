@@ -115,8 +115,8 @@ jobs:
                 fetch-depth: 0
             - name: create pull request
               run: |
-              echo ${{env.names}} 
-              gh pr create -B UAT -H ${{ names }} --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
+                 echo ${{env.names}} 
+                 gh pr create -B UAT -H ${{ names }} --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
               env:
                   GH_TOKEN: ${{ github.token }}
                   
