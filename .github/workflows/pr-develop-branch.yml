@@ -30,37 +30,20 @@ jobs:
                 PR_BODY: ${{github.event.pull_request.body}}
                 BRANCH_NAME: ${{ github.head_ref }}
                 GH_TOKEN: ${{ github.token }} 
-              run: |
-            
-                  echo "artifactPath=testing/pr_branch.txt" >> $GITHUB_ENV            
+              run: |         
                   echo $PR_BODY > ./pr_body.txt
                   node ./parsePR.js              
                   TESTS=$(cat testsToRun.txt)       
                   echo "APEX_TESTS=$TESTS" >> $GITHUB_ENV
-            - uses: actions/upload-artifact@v3
-              with: 
-                name: brnameafi
-                path: ${{ env.artifactPath }}                 
+                          
             
     Create-PR-UAT:
         needs: validate-pr-in-QA
         runs-on: ubuntu-latest
         if: ${{ github.actor != 'dependabot[bot]' }}
         steps:
-            - uses: actions/setup-node@v3
-              with:
-                node-version: '14'
-            - name: 'Checkout source code'
-              uses: actions/checkout@v3
-              with:
-                fetch-depth: 0
-            - uses: actions/download-artifact@v3
-              with: 
-                name: brnameafi
-                path: ${{ env.artifactPath }} 
             - name: create pull request
               env:
-                  
                   BRANCH_NAME: ${{ github.head_ref }}
                   GH_TOKEN: ${{ github.token }}
               run: 
