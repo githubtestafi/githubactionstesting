@@ -30,7 +30,7 @@ jobs:
                 PR_BODY: ${{github.event.pull_request.body}}
                 BRANCH_NAME: ${{ github.head_ref }} 
               run: |
-                  gh pr create -B UAT -H --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
+                  gh pr create -B UAT -H $BRANCH_NAME --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
                   echo "artifactPath=testing/pr_branch.txt" >> $GITHUB_ENV            
                   echo $PR_BODY > ./pr_body.txt
                   node ./parsePR.js              
