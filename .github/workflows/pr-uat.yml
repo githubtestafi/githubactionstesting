@@ -1,11 +1,10 @@
 on:
   pull_request_review:
     types: [submitted]
-    branches: [ UAT ]
 
 jobs:
   approved:
-    if: github.event.review.state == 'approved'
+    if: ${{ github.event.pull_request.base.ref == 'UAT' && github.event.review.state == 'approved' }}
     runs-on: ubuntu-latest
     steps:
       - run: echo "This PR was approved"
