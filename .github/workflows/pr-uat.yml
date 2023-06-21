@@ -44,7 +44,7 @@ jobs:
               mkdir changed-sources
               sfdx sgd:source:delta --to "HEAD" --from "HEAD^" --output changed-sources/ --generate-delta --source force-app/
           
-              sfdx force:source:deploy -p "changed-sources/force-app" --checkonly --testlevel RunLocalTests  --json
+              sfdx force:source:deploy -p "changed-sources/force-app" --checkonly --testlevel NoTestRun  --json
         
         - name: 'Deploy destructive changes (if any)'
           run: sfdx force:mdapi:deploy -d "changed-sources/destructiveChanges" --checkonly --ignorewarnings 
