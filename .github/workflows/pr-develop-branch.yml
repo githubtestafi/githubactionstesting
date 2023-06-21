@@ -15,11 +15,9 @@ permissions:
 
 jobs:
   approved:
-    if: github.event.review.state == 'approved'
-      validate-pr-in-QA:
-        runs-on: ubuntu-latest
-        if: ${{ github.actor != 'dependabot[bot]' }}
-        steps:
+    if: github.event.review.state == 'approved' && ${{ github.actor != 'dependabot[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
             - uses: actions/setup-node@v3
               with:
                 node-version: '14'
@@ -64,8 +62,6 @@ jobs:
               run: | 
                   mkdir changed-sources
                   sfdx sgd:source:delta --to "HEAD" --from "HEAD^" --output changed-sources/ --generate-delta --source force-app/
-            
-              run: |
                   sfdx force:source:deploy -p "changed-sources/force-app" --checkonly --testlevel RunLocalTests  --json
 
             - name: 'Deploy destructive changes (if any)'
