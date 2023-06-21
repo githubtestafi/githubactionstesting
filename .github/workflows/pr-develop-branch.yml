@@ -9,7 +9,7 @@ on:
 
 jobs:
   approved:
-    if: github.event.review.state == 'approved' && ${{ github.actor != 'dependabot[bot]' }}
+    if: github.event.review.state == 'approved'
     runs-on: ubuntu-latest
     steps:
         - uses: actions/setup-node@v3
