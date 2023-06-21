@@ -1,6 +1,8 @@
 on:
   pull_request_review:
     types: [submitted]
+    paths:
+        - 'force-app/**'
     
 permissions:
   security-events: write
@@ -10,7 +12,7 @@ permissions:
 
 jobs:
   approved:
-    if: ${{ github.event.pull_request.base.ref == 'UAT' && github.event.review.state == 'approved' }}
+    if: ${{ github.event.pull_request.base.ref == 'UAT' && github.event.review.state == 'approved' && github.actor != 'dependabot[bot]' }}
     runs-on: ubuntu-latest
     steps:
         - uses: actions/setup-node@v3
@@ -54,23 +56,3 @@ jobs:
         
         - name: 'Deploy destructive changes (if any)'
           run: sfdx force:mdapi:deploy -d "changed-sources/destructiveChanges" --checkonly --ignorewarnings 
-
-  Create-PR-master:
-        needs: approved
-        runs-on: ubuntu-latest
-        if: ${{ github.actor != 'dependabot[bot]' }}
-        steps:
-            - uses: actions/setup-node@v3
-              with:
-                node-version: '14'
-            - name: 'Checkout source code'
-              uses: actions/checkout@v3
-              with:
-                fetch-depth: 0
-            - name: create pull request
-              env:
-                  BRANCH_NAME: ${{ github.head_ref }}
-                  GH_TOKEN: ${{ github.token }}
-              run: 
-                  gh pr create -B master -H $BRANCH_NAME --title 'Merge echo ${{env.APEX_TESTS}} into master' --body 'Created by Github action'    
-
