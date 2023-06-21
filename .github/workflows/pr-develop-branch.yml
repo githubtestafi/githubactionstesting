@@ -2,8 +2,8 @@
 name: Validate PR
 on:
     pull_request:
-      types: [opened, synchronize]
-      branches: [ QA ]
+      types: [submitted]
+      branches: [ UAT ]
       paths:
         - 'force-app/**'
 #
@@ -14,7 +14,9 @@ permissions:
   pull-requests: write
 
 jobs:
-    validate-pr-in-QA:
+  approved:
+    if: github.event.review.state == 'approved'
+      validate-pr-in-QA:
         runs-on: ubuntu-latest
         if: ${{ github.actor != 'dependabot[bot]' }}
         steps:
@@ -62,56 +64,11 @@ jobs:
               run: | 
                   mkdir changed-sources
                   sfdx sgd:source:delta --to "HEAD" --from "HEAD^" --output changed-sources/ --generate-delta --source force-app/
-            - name: 'Scan code'
-              run: |
-                  cd changed-sources
-                  sfdx scanner:run --format sarif --target './**/*.cls' --category "Design,Best Practices,Performance" --outfile 'apexScanResults.sarif'  
-                  cd ..
-            - name: Upload SARIF file
-              uses: github/codeql-action/upload-sarif@v2
-              with:
-                sarif_file: changed-sources/apexScanResults.sarif
-
-            # We do a check-only deploy and we only run the tests specified in the PR
-            # If the env variable does not equal 'all', we know that there is a list of
-            # tests that can be run test
-
-            - name: 'Check-only deploy delta changes - run specified tests'
-              if: ${{ env.APEX_TESTS != 'all' && env.APEX_TESTS != 'NoTestRun' }}
-              run: |
-                  echo ${{env.APEX_TESTS}}
-                  sfdx force:source:deploy -p "changed-sources/force-app" --checkonly --testlevel RunSpecifiedTests --runtests ${{env.APEX_TESTS}} --json
-
-            # If the env variable equals all, we run all tests
-            - name: 'Check-only deploy delta changes - run Local tests'
-              if: ${{ env.APEX_TESTS == 'all' }}
+            
               run: |
                   sfdx force:source:deploy -p "changed-sources/force-app" --checkonly --testlevel RunLocalTests  --json
 
-            - name: 'Check-only deploy delta changes - No Test Run tests'
-              if: ${{ env.APEX_TESTS == 'NoTestRun' }}
-              run: |
-                  sfdx force:source:deploy -p "changed-sources/force-app" --checkonly --testlevel NoTestRun --json
-            
             - name: 'Deploy destructive changes (if any)'
               run: sfdx force:mdapi:deploy -d "changed-sources/destructiveChanges" --checkonly --ignorewarnings 
     
-    Create-PR-UAT:
-      needs: validate-pr-in-QA
-      runs-on: ubuntu-latest
-      if: ${{ github.actor != 'dependabot[bot]' }}
-      steps:
-          - uses: actions/setup-node@v3
-            with:
-              node-version: '14'
-          - name: 'Checkout source code'
-            uses: actions/checkout@v3
-            with:
-              fetch-depth: 0
-          - name: create pull request
-            env:
-                BRANCH_NAME: ${{ github.head_ref }}
-                GH_TOKEN: ${{ github.token }}
-            run: 
-                gh pr create -B UAT -H $BRANCH_NAME --title 'Merge echo ${{env.APEX_TESTS}} into QA' --body 'Created by Github action'
-                            
+    
