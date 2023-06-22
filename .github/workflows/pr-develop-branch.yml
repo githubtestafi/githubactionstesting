@@ -91,7 +91,7 @@ jobs:
             - name: 'Check-only deploy delta changes - No Test Run tests'
               if: ${{ env.APEX_TESTS == 'NoTestRun' }}
               run: |
-                  sfdx force:source:deploy -p "changed-sources/force-app" --checkonly --testlevel NoTestRun --json
+                  sfdx force:source:deploy -p "changed-sources/force-app" --testlevel NoTestRun --json
             
             - name: 'Deploy destructive changes (if any)'
               run: sfdx force:mdapi:deploy -d "changed-sources/destructiveChanges" --ignorewarnings 
