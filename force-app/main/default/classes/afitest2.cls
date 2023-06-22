@@ -8,6 +8,6 @@
 public with sharing class afitest2 {
     public afitest2() {
         // this is a change
-        // test
+        // test 2
     }
 }
