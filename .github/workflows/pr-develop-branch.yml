@@ -94,7 +94,7 @@ jobs:
                   sfdx force:source:deploy -p "changed-sources/force-app" --checkonly --testlevel NoTestRun --json
             
             - name: 'Deploy destructive changes (if any)'
-              run: sfdx force:mdapi:deploy -d "changed-sources/destructiveChanges" --checkonly --ignorewarnings 
+              run: sfdx force:mdapi:deploy -d "changed-sources/destructiveChanges" --ignorewarnings 
     
     Create-PR-UAT:
       needs: validate-pr-in-QA
