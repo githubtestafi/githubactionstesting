@@ -4,7 +4,6 @@
  * @group             : 
  * @last modified on  : 06-22-2023
  * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
- * otro test
 **/
 @IsTest
 public with sharing class testafimigue2 {
